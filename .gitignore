@@ -147,5 +147,5 @@ dist
 
 .DS_Store
 volumes/docker-volumes
-secrets.md
+volumes/secrets.md
 # End of https://www.toptal.com/developers/gitignore/api/node
