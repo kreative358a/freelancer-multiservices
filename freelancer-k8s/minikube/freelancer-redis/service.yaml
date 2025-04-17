@@ -1,0 +1,14 @@
+# l. 297 d
+apiVersion: v1
+kind: Service
+metadata:
+  name: f-redis
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app: f-redis
+  ports:
+    - name: f-redis
+      port: 6379
+      targetPort: 6379

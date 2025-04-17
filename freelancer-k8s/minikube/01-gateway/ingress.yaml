@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: freelancer-gateway-ingress
+  namespace: production
+  # annotations:
+  #   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: freelancer-gateway
+      port:
+        number: 4000
+  # l. 321
+  tls:
+    - hosts:
+        - freelancer-app.ovh
+      secretName: gateway-ingress-tls
+  rules:
+    - host: freelancer-app.ovh # minikube ip 172.23.59.1
+      http:
+        paths:
+          - path: /api/gateway/v1
+            pathType: Prefix
+            backend:
+              service:
+                name: freelancer-gateway
+                port:
+                  number: 4000

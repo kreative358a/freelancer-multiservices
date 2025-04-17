@@ -1,0 +1,14 @@
+# l. 301 c
+apiVersion: v1
+kind: Service
+metadata:
+  name: f-mysql
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app: f-mysql
+  ports:
+    - name: f-mysql
+      port: 3306
+      targetPort: 3306

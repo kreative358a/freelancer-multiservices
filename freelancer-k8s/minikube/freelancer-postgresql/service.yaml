@@ -1,0 +1,14 @@
+# l. 303 c
+apiVersion: v1
+kind: Service
+metadata:
+  name: f-postgres
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app: f-postgres
+  ports:
+    - name: f-postgres
+      port: 5432
+      targetPort: 5432

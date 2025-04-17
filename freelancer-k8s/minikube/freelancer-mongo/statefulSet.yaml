@@ -1,0 +1,30 @@
+# l. 306 d
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: f-mongo
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: f-mongo
+  serviceName: f-mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: f-mongo
+    spec:
+      containers:
+        - name: f-mongo
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+              name: f-mongo
+          volumeMounts:
+            - name: mongo-local-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongo-local-storage
+          persistentVolumeClaim:
+            claimName: mongo-pvc

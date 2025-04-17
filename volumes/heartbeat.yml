@@ -1,0 +1,100 @@
+# l. 281
+heartbeat.config.monitors:
+  path: ${path.config}/monitors.d/*.yml
+  reload.enabled: false
+  reload.period: 5s
+
+heartbeat.monitors:
+  - type: http
+    id: freelancer-api-gateway
+    name: Freelancer API Gateway Service
+    schedule: "@every 5s"
+    # hosts: ["http://<ip_address>:4000/gateway-health"]
+    # hosts: ["http://<container_name>:4000/gateway-health"]
+    hosts: ["http://172.28.160.1:4000/gateway-health"]
+    # hosts: ["http://192.168.8.124:4001/notification-health"]
+    # ["http://gateway_container/gateway-health"]
+    # ["http://192.168.8.124:4000/gateway-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+  - type: http
+    id: freelancer-notification
+    name: Freelancer Notification Service
+    schedule: "@every 5s"
+    hosts: ["http://172.28.160.1:4001/notification-health"]
+    # hosts: ["http://notification_container/notification-health"]
+    # hosts: ["http://192.168.8.124:4001/notification-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+  - type: http
+    id: freelancer-auth
+    name: Freelancer Auth Service
+    schedule: "@every 5s"
+    hosts: ["http://172.28.160.1:4002/auth-health"]
+    # hosts: ["http://auth_container/auth-health"]
+    # hosts: ["http://192.168.8.124:4002/auth-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+  - type: http
+    id: freelancer-users
+    name: Freelancer Users Service
+    schedule: "@every 5s"
+    hosts: ["http://172.28.160.1:4003/user-health"]
+    # hosts: ["http://users_container/user-health"]
+    # hosts: ["http://192.168.8.124:4003/user-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+  - type: http
+    id: freelancer-gigs
+    name: Freelancer Gigs Service
+    schedule: "@every 5s"
+    hosts: ["http://172.28.160.1:4004/gig-health"]
+    # hosts: ["http://gig_container/gig-health"]
+    # hosts: ["http://192.168.8.124:4004/gig-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+  - type: http
+    id: freelancer-chat
+    name: Freelancer Chat Service
+    schedule: "@every 5s"
+    hosts: ["http://172.28.160.1:4005/chat-health"]
+    # hosts: ["http://chat_container/chat-health"]
+    # hosts: ["http://192.168.8.124:4005/chat-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+  - type: http
+    id: freelancer-orders
+    name: Freelancer Orders Service
+    schedule: "@every 5s"
+    hosts: ["http://172.28.160.1:4006/order-health"]
+    # hosts: ["http://order_container:4006/order-health"]
+    # hosts: ["http://192.168.8.124:4006/order-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+  - type: http
+    id: freelancer-reviews
+    name: Freelancer Reviews Service
+    schedule: "@every 5s"
+    urls: ["http://172.28.160.1:4007/review-health"]
+    # urls: ["http://review_container/review-health"]
+    # urls: ["http://192.168.8.124:4007/review-health"]
+    check.request.method: GET
+    check.response.status: [200]
+
+processors:
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+
+monitoring.enabled: true
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch_container:9200"]
+  username: "elastic"
+  password: "admin1234"

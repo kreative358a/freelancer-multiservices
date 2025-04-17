@@ -1,0 +1,51 @@
+# l. 308 b
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: f-kibana
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: f-kibana
+  template:
+    metadata:
+      labels:
+        app: f-kibana
+    spec:
+      containers:
+        - name: f-kibana
+          image: docker.elastic.co/kibana/kibana:8.13.0
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1500m"
+            requests:
+              cpu: 250m
+              memory: 1Gi
+          ports:
+            - name: f-kibana
+              containerPort: 5601
+          # ...
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              # http://<service-name>.<namespace>.svc.cluster.local:<port-number>
+              value: http://f-elastic.production.svc.cluster.local:9200
+            # - name: ELASTIC_PASSWORD
+            #   value: admin1234
+
+            - name: ELASTICSEARCH_USERNAME
+              value: kibana_system
+            - name: ELASTICSEARCH_PASSWORD
+              # add to secret file
+              value: kibana
+            - name: ELASTICSEARCH_SERVICEACCOUNT_TOKEN
+              value: AAEAAWVsYXN0aWMva2liYW5hL2Yta2liYW5hOndjcGJ5enpGUThDVXZXSUQ3dEZ0UHc
+          volumeMounts:
+            - name: kibana-config
+              mountPath: /usr/share/kibana/config
+      volumes:
+        - name: kibana-config
+          configMap:
+            name: kibana-config

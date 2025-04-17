@@ -1,0 +1,15 @@
+# l. 315 b
+apiVersion: v1
+kind: Service
+metadata:
+  name: freelancer-chat
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app: freelancer-chat
+  ports:
+    - name: chat
+      port: 4005
+      targetPort: 4005
+      protocol: TCP

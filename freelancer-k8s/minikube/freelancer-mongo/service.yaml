@@ -1,0 +1,14 @@
+# l. 306 c
+apiVersion: v1
+kind: Service
+metadata:
+  name: f-mongo
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app: f-mongo
+  ports:
+    - name: f-mongo
+      port: 27017
+      targetPort: 27017

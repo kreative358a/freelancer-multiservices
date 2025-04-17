@@ -1,0 +1,15 @@
+# l. 314 b
+apiVersion: v1
+kind: Service
+metadata:
+  name: freelancer-review
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app: freelancer-review
+  ports:
+    - name: review
+      port: 4007
+      targetPort: 4007
+      protocol: TCP

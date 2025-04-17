@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freelancer-notifications
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: freelancer-notifications
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: freelancer-notifications
+    spec:
+      containers:
+        - name: freelancer-notifications
+          image: kreative358/freelancer-notifications:stable
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 150Mi
+          ports:
+            - name: notification
+              containerPort: 4001
+          env:
+            - name: ENABLE_APM
+              value: "1"
+            - name: NODE_ENV
+              value: "production"
+            - name: CLIENT_URL
+              # value: "https://freelancer-app.ovh"
+              value: "http://localhost:3000"
+            - name: RABBITMQ_ENDPOINT
+              value: amqp://freelancer:freelancerpass@f-queue.production.svc.cluster.local:5672
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: freelancer-backend-secret
+              #     key: freelancer-rabbitmq-endpoint
+            - name: SENDER_EMAIL
+              value: karelle.moen@ethereal.email
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: freelancer-backend-secret
+              #     key: sender-email
+            - name: SENDER_EMAIL_PASSWORD
+              value: cZn6mPdTSuBakUMTRg
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: freelancer-backend-secret
+              #     key: sender-email-password
+            - name: ELASTIC_SEARCH_URL
+              value: http://elastic:admin1234@f-elastic.production.svc.cluster.local:9200
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: freelancer-backend-secret
+              #     key: freelancer-elasticsearch-url
+            - name: ELASTIC_APM_SERVER_URL
+              # value: http://f-apm.production.svc.cluster.local:8200
+              valueFrom:
+                secretKeyRef:
+                  name: freelancer-backend-secret
+                  key: freelancer-elastic-apm-server-url
+            - name: ELASTIC_APM_SECRET_TOKEN
+              # value: thisismysecrettoken
+              valueFrom:
+                secretKeyRef:
+                  name: freelancer-backend-secret
+                  key: freelancer-elastic-apm-secret-token

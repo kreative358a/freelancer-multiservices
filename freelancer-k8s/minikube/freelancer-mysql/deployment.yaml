@@ -1,0 +1,85 @@
+# l. 301 d
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: f-mysql
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: f-mysql
+  template:
+    metadata:
+      labels:
+        app: f-mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: f-mysql
+          image: mysql:8.4.4
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              # value: freelancer_pass
+              valueFrom:
+                secretKeyRef:
+                  name: freelancer-backend-secret
+                  key: freelancer-mysql-root-password
+            - name: MYSQL_PASSWORD
+              # value: freelancer_pass
+              valueFrom:
+                secretKeyRef:
+                  name: freelancer-backend-secret
+                  key: freelancer-mysql-password
+              # # value: freelancer
+            - name: MYSQL_DATABASE
+              # value: freelancer_auth
+              valueFrom:
+                secretKeyRef:
+                  name: freelancer-backend-secret
+                  key: freelancer-mysql-db-name
+            - name: MYSQL_USER
+              # value: freelancer_user
+              valueFrom:
+                secretKeyRef:
+                  name: freelancer-backend-secret
+                  key: freelancer-mysql-user
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "0.5"
+            requests:
+              cpu: 100m
+              memory: 150Mi
+          ports:
+            - name: f-mysql
+              containerPort: 3306
+          volumeMounts:
+            - name: mysql-local-storage
+              mountPath: /var/lib/mysql
+              subPath: mysql
+          # l. 302
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - "-c"
+                - |
+                  mysql -h127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD -e'SELECT 1'
+            initialDelaySeconds: 120
+            periodSeconds: 300
+            timeoutSeconds: 60
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - "-c"
+                - |
+                  mysqladmin -u$MYSQL_USER -p$MYSQL_PASSWORD ping
+            initialDelaySeconds: 120
+            periodSeconds: 300
+            timeoutSeconds: 60
+      volumes:
+        - name: mysql-local-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc

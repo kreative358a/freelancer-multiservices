@@ -1,0 +1,20 @@
+{
+  "jenkins-runner.hostConfigs": {
+    "jenkins-master": {
+      "url": "http://localhost:8080/",
+      "user": "freelancerapp",
+      "password": "freelancerpass",
+      "useCrumbIssuer": true
+    }
+  },
+  "jenkins-runner.jobs": {
+    "freelancer-review": {
+      "isDefault": true,
+      "runWith": "jenkins-master",
+      "name": "freelancer-review"
+    }
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
