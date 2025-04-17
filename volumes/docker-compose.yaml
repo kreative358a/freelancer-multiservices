@@ -389,7 +389,7 @@ services:
       - API_GATEWAY_URL=http://gateway_container:4000
       - CLIENT_URL=http://localhost:3000
       - RABBITMQ_ENDPOINT=amqp://freelancer:freelancerpass@rabbitmq_container:5672
-      - STRIPE_API_KEY=sk_test_51QyJQIRW4WPmgNCn2ctGO1nz3BhxEg2jWTKhTDffXh3UF3is9meCsEeOGIoweG5EIAmje8RBq5QVH32WR9bPSpvQ00NgpjEUAW
+      - STRIPE_API_KEY=
       - CLOUD_NAME=dnt2ui6y0
       - CLOUD_API_KEY=459583183294839
       - CLOUD_API_SECRET=nA-ORtkwoggxgRAb_0J2SkWIlyc
